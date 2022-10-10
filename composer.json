@@ -1,0 +1,19 @@
+{
+    "name": "enshtein/wp-migrations",
+    "description": "A WordPress library for managing database table schema upgrades and data seeding.",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Enshtein\\WpMigrations\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Leonid",
+            "email": "gfk@mail.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
