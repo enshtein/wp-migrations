@@ -4,7 +4,7 @@ A WordPress library for managing database table schema upgrades and data seeding
 
 ## Installation
 
-- `composer create-project enshtein/wp-migrations`
+- `composer require enshtein/wp-migrations`
 - bootstrap the package by adding `\Enshtein\WpMigrations\Migrate::instance();` to an mu-plugin.
 
 ## Migrations
