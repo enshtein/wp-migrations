@@ -7,6 +7,5 @@ class Command extends \WP_CLI_Command {
     {
         $migrate = \Enshtein\WpMigrations\Migrate::instance();
         $result = $migrate->run($args, $assoc_args);
-        \WP_CLI::log($result);
     }
 }
