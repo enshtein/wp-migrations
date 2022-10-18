@@ -68,13 +68,39 @@ class Migrate
 	}
 
 	public function migrate($args, $assoc_args)
-	{		
+	{	
+		$this->dbsync();	
 		$migrations = $this->db->get_results("SELECT * FROM `{$this->params['table']}` WHERE `batch` <= 0", ARRAY_A);
 		$this->up($migrations);
 	}
 
+	public function dbsync()
+	{
+		$folder = rtrim($this->params['path'], '/') . '/' . $this->params['folder'];
+		$_files = glob($folder.'/'.'*.php');
+		if (is_array($_files) && count($_files)) {
+			$migrations = $this->db->get_results("SELECT `migration` FROM `{$this->params['table']}`", ARRAY_A);
+			$_db_migrations = [];
+			if (is_array($migrations) && count($migrations)) {
+				foreach ($migrations as $_item) {
+					$_db_migrations[] = $_item['migration'];
+				}
+			}
+			foreach ($_files as $_file) {
+				$_migration = basename($_file, '.php');
+				if (!in_array($_migration, $_db_migrations)) {
+					$this->db->insert($this->params['table'], [
+						'migration' => $_migration,
+						'batch' => 0,
+					]);
+				}
+			}
+		}
+	}
+
 	public function create($args, $assoc_args)
 	{
+		$this->dbsync();
 		if (!isset($args[0]) || trim($args[0])=='') {
 			\WP_CLI::error('Migration name is empty!');
 		}
@@ -211,6 +237,7 @@ class Migrate
 
 	public function status($args, $assoc_args)
 	{
+		$this->dbsync();
 		$migrations = $this->db->get_results("SELECT * FROM `{$this->params['table']}` ORDER BY `id` DESC", ARRAY_A);
 		if (is_array($migrations) && count($migrations)) {
 			$items = [];
